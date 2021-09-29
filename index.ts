@@ -33,13 +33,31 @@ function combineVolunteers(
         }
     })
 }
+function isVerified(verified: ( String | Boolean)) {
+    if(typeof verified === 'string') {
+        if(verified === 'Yes') {
+            return true;
+        }
+        return false;
+    }
+    return verified;
+}
+
+function getHours(activity: CombinedActivity) {
+    if('hours' in activity) {
+        return activity.hours
+    } 
+    return activity.time;
+}
 
 function calculateHours(volunteers: Volunteers[]) {
     return volunteers.map((volunteer) => {
         let hours = 0;
 
         volunteer.activities.forEach((activity) => {
-
+            if(isVerified(activity.verified)) {
+                hours += getHours(activity)
+            }
         });
 
         return {
@@ -53,5 +71,3 @@ function calculateHours(volunteers: Volunteers[]) {
 const combinedVolunteers = combineVolunteers(
     [].concat(wolfPointVolunteers, raccoonMeadowsVolunteers)
 );
-
-console.log(combinedVolunteers);
